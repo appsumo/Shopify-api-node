@@ -23,6 +23,8 @@ const resources = require('./resources');
  * @param {Boolean} [options.presentmentPrices] Whether to include the header to
  *     pull presentment prices for products
  * @param {Boolean|Object} [options.autoLimit] Limits the request rate
+ * @param {Function} [options.rateLimitFn] Function to use to limit api requests.
+ *     options.autoLimit will be passed to rateLimitFn
  * @param {Number} [options.timeout] The request timeout
  * @constructor
  * @public
@@ -64,14 +66,19 @@ function Shopify(options) {
     protocol: 'https:'
   };
 
-  if (options.autoLimit) {
+  if (typeof options.rateLimitFn === 'function' || options.autoLimit) {
     const conf = transform(options.autoLimit, (result, value, key) => {
       if (key === 'calls') key = 'limit';
       result[key] = value;
     }, { bucketSize: 35 });
 
-    this.request = stopcock(this.request, conf);
+    if (typeof options.rateLimitFn === 'function') {
+      this.request = options.rateLimitFn(this.request, conf);
+    } else {
+      this.request = stopcock(this.request, conf);
+    }
   }
+
 }
 
 Object.setPrototypeOf(Shopify.prototype, EventEmitter.prototype);
