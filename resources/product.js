@@ -29,14 +29,15 @@ assign(Product.prototype, pick(base, ['buildUrl', 'delete', 'count']));
  * @return {Promise} Promise that resolves with the result
  * @public
  */
-Product.prototype.get = function(id, params) {
+Product.prototype.get = function get(id, params) {
   const url = this.buildUrl(id, params);
+  const headers = {};
 
   if (this.shopify.options.presentmentPrices) {
-    url.headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
+    headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
   }
 
-  return this.shopify.request(url, 'GET', this.key);
+  return this.shopify.request(url, 'GET', this.key, undefined, headers);
 };
 
 /**
@@ -46,14 +47,15 @@ Product.prototype.get = function(id, params) {
  * @return {Promise} Promise that resolves with the result
  * @public
  */
-Product.prototype.create = function(params) {
+Product.prototype.create = function create(params) {
   const url = this.buildUrl();
+  const headers = {};
 
   if (this.shopify.options.presentmentPrices) {
-    url.headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
+    headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
   }
 
-  return this.shopify.request(url, 'POST', this.key, params);
+  return this.shopify.request(url, 'POST', this.key, params, headers);
 };
 
 /**
@@ -63,14 +65,15 @@ Product.prototype.create = function(params) {
  * @return {Promise} Promise that resolves with the result
  * @public
  */
-Product.prototype.list = function(params) {
+Product.prototype.list = function list(params) {
   const url = this.buildUrl(undefined, params);
+  const headers = {};
 
   if (this.shopify.options.presentmentPrices) {
-    url.headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
+    headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
   }
 
-  return this.shopify.request(url, 'GET', this.name);
+  return this.shopify.request(url, 'GET', this.name, undefined, headers);
 };
 
 /**
@@ -81,14 +84,15 @@ Product.prototype.list = function(params) {
  * @return {Promise} Promise that resolves with the result
  * @public
  */
-Product.prototype.update = function(id, params) {
+Product.prototype.update = function update(id, params) {
   const url = this.buildUrl(id);
+  const headers = {};
 
   if (this.shopify.options.presentmentPrices) {
-    url.headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
+    headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
   }
 
-  return this.shopify.request(url, 'PUT', this.key, params);
+  return this.shopify.request(url, 'PUT', this.key, params, headers);
 };
 
 module.exports = Product;

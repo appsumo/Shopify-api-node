@@ -29,14 +29,15 @@ assign(ProductListing.prototype, pick(base, ['count', 'buildUrl', 'delete']));
  * @return {Promise} Promise that resolves with the result
  * @public
  */
-ProductListing.prototype.get = function(id, params) {
+ProductListing.prototype.get = function get(id, params) {
   const url = this.buildUrl(id, params);
+  const headers = {};
 
   if (this.shopify.options.presentmentPrices) {
-    url.headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
+    headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
   }
 
-  return this.shopify.request(url, 'GET', this.key);
+  return this.shopify.request(url, 'GET', this.key, undefined, headers);
 };
 
 /**
@@ -46,14 +47,15 @@ ProductListing.prototype.get = function(id, params) {
  * @return {Promise} Promise that resolves with the result
  * @public
  */
-ProductListing.prototype.list = function(params) {
+ProductListing.prototype.list = function list(params) {
   const url = this.buildUrl(undefined, params);
+  const headers = {};
 
   if (this.shopify.options.presentmentPrices) {
-    url.headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
+    headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
   }
 
-  return this.shopify.request(url, 'GET', this.name);
+  return this.shopify.request(url, 'GET', this.name, undefined, headers);
 };
 
 /**
@@ -67,12 +69,13 @@ ProductListing.prototype.list = function(params) {
 ProductListing.prototype.create = function create(productId, params) {
   params || (params = { product_id: productId });
   const url = this.buildUrl(productId);
+  const headers = {};
 
   if (this.shopify.options.presentmentPrices) {
-    url.headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
+    headers['X-Shopify-Api-Features'] = 'include-presentment-prices';
   }
 
-  return this.shopify.request(url, 'PUT', this.key, params);
+  return this.shopify.request(url, 'PUT', this.key, params, headers);
 };
 
 /**

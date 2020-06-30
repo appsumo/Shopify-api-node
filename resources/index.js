@@ -9,9 +9,11 @@ const map = {
   asset: 'asset',
   balance: 'balance',
   blog: 'blog',
+  cancellationRequest: 'cancellation-request',
   carrierService: 'carrier-service',
   checkout: 'checkout',
   collect: 'collect',
+  collection: 'collection',
   collectionListing: 'collection-listing',
   comment: 'comment',
   country: 'country',
@@ -27,6 +29,8 @@ const map = {
   event: 'event',
   fulfillment: 'fulfillment',
   fulfillmentEvent: 'fulfillment-event',
+  fulfillmentOrder: 'fulfillment-order',
+  fulfillmentRequest: 'fulfillment-request',
   fulfillmentService: 'fulfillment-service',
   giftCard: 'gift-card',
   giftCardAdjustment: 'gift-card-adjustment',
@@ -73,7 +77,7 @@ const map = {
  * @private
  */
 function registerAll(Shopify) {
-  Object.keys(map).forEach(prop => {
+  Object.keys(map).forEach((prop) => {
     Object.defineProperty(Shopify.prototype, prop, {
       configurable: true,
       get: function get() {
@@ -84,7 +88,7 @@ function registerAll(Shopify) {
         })[prop];
       },
       set: function set(value) {
-        return Object.defineProperty(this, prop, { value })[prop];
+        Object.defineProperty(this, prop, { value })[prop];
       }
     });
   });
